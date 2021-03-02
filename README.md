@@ -8,7 +8,6 @@ This application enables you to easily implement ProtonVPN on your MikroTik rout
 
 ### setup
 `pipenv --python 3.8`
-
 `pipenv install -r requirements.txt`
 
 ### running the script 
