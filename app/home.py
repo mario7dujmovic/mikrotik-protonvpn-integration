@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import routeros_api as ros
+from mikrotik_setup import MikroTikSetup as mtik
 
 def print_users(router_api):
     return router_api.get_binary_resource('/').call('user/print', {})
@@ -22,14 +23,19 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
         break
     if event == 'Ok':
-        connection = ros.RouterOsApiPool(values[2], username=values[3], password=values[4], plaintext_login=True)
-        api = connection.get_api()
+        # connection = ros.RouterOsApiPool(values[2], username=values[3], password=values[4], plaintext_login=True)
+        # api = connection.get_api()
+        # api.get_binary_resource('/').call('tool/fetch',{ 'url': "https://protonvpn.com/download/ProtonVPN_ike_root.der" })
         #users = api.get_resource('user')
         try:
+            setupMikrotik = mtik(values[2], values[3], values[4])
+            setupMikrotik.connect_to_api()
+            setupMikrotik.get_protonvpn_cert()
+            setupMikrotik.set_ipsec_mode_config()
             # users.remove(id="testuser1")
             # users.add(name='testuser1', password='987654321', group='read')
-            users_list = print_users(api)
-            print(users_list)
+            # users_list = print_users(api)
+            print('users_list')
         except ValueError:
             print("Could not add a user, since it already exists.")
 

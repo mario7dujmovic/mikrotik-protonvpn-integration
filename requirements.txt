@@ -1,2 +1,2 @@
 pysimplegui
-routeros-api
+git+https://github.com/mario7dujmovic/RouterOS-api.git#egg=RouterOS-api

@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-RouterOS-api = "*"
 pysimplegui = "*"
+routeros-api = {git = "https://github.com/mario7dujmovic/RouterOS-api.git"}
 
 [dev-packages]
 

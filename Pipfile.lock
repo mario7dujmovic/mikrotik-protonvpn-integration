@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3a24038749da057976a67d7a00359a5a7c0b62d69aa3fd716a4d0076ec90f95d"
+            "sha256": "9cc5a1ab4e5d3367f7e6c1a22bccfec1f1980537d45877355c3839dcc820352f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -18,19 +18,15 @@
     "default": {
         "pysimplegui": {
             "hashes": [
-                "sha256:1169d3434137242eca2c95ca13ec21de398990563e8f58a10b581ebd127b13cd",
-                "sha256:b7b986512d77bf50a92207579bed4cf7f2f287ce14a82f4b57c5f368bca54c9c"
+                "sha256:65055716b7669c0dcba379d48a59cecdd106b5c5b327541cbc5fbe7d4efca7bd",
+                "sha256:770d5419a7a01c1889a5e789a2fed60987e5639058e6375b41ac69a5408c855d"
             ],
             "index": "pypi",
-            "version": "==4.34.0"
+            "version": "==4.35.0"
         },
         "routeros-api": {
-            "hashes": [
-                "sha256:1b9898460ecc4667b54e477d495b74c2f24ae0aac4c90dd0e62f23ec7eae8252",
-                "sha256:bf38da94a570875eaa87ff537558f765a4697dbce1a9753070194b687f441bf0"
-            ],
-            "index": "pypi",
-            "version": "==0.17.0"
+            "git": "https://github.com/mario7dujmovic/RouterOS-api.git",
+            "ref": "535e10ad2dd1f05d5fddfeac664739018c5c67cb"
         },
         "six": {
             "hashes": [
