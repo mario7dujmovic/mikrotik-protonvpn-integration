@@ -30,8 +30,9 @@ while True:
         try:
             setupMikrotik = mtik(values[2], values[3], values[4])
             setupMikrotik.connect_to_api()
-            setupMikrotik.get_protonvpn_cert()
-            setupMikrotik.set_ipsec_mode_config()
+            #setupMikrotik.get_protonvpn_cert()
+            #setupMikrotik.set_ipsec_mode_config()
+            print(setupMikrotik.get_ipsec_proposal())
             # users.remove(id="testuser1")
             # users.add(name='testuser1', password='987654321', group='read')
             # users_list = print_users(api)

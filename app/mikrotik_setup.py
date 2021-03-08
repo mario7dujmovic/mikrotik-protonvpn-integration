@@ -33,8 +33,61 @@ class MikroTikSetup:
         }
         self.api.get_binary_resource('/').call('ip/ipsec/peer/add',args)
 
+    def get_ipsec_proposal(self):
+        proposal = self.api.get_resource('/ip/ipsec/proposal')
+        return proposal.get(default="yes")[0]['id']
+
     def set_ipsec_proposal(self):
         args = {
-
+            'auth-algorithms': 'sha256',
+            'enc-algorithms': 'aes-256-cbc',
+            'pfs-group': 'modp2048',
+            '.id': self.get_ipsec_proposal()
         }
-        self.api.get_binary_resource('/').call('ip/ipsec/proposal/set',args)
+        self.api.get_binary_resource('/').call('ip/ipsec/peer/set',args)
+
+    def add_ipsec_identity(self, username, password):
+        args = {
+            'auth-method': 'eap',
+            'certificate': 'ProtonVPN',
+            'eap-methods': 'eap-mschapv2',
+            'generate-policy': 'port-override',
+            'mode-config': 'ProtonVPN',
+            'peer': 'ProtonVPN',
+            'policy-template-group': 'ProtonVPN',
+            'username': username,
+            'password': password
+        }
+        self.api.get_binary_resource('/').call('ip/ipsec/identity/add',args)
+
+    def add_ipsec_policy(self):
+        args = {
+            'dst-address': '0.0.0.0/0',
+            'group': 'ProtonVPN',
+            'src-address': '0.0.0.0/0',
+            'template': 'yes'
+        }
+        self.api.get_binary_resource('/').call('ip/ipsec/add',args)
+
+    def add_fw_mangle_rule(self, args):
+        self.api.get_binary_resource('/').call('ip/firewall/mangle/add', args)
+
+    def add_fw_mangle_prerouting_rule(self):
+        args = {
+            'chain': 'prerouting',
+            'action': 'mark-connection',
+            'new-connection-mark': 'ProtonVPN',
+            'dst-address': '0.0.0.0/0',
+            'connection-mark': 'no-mark'
+        }
+        self.add_fw_mangle_rule(args)
+    
+    def add_fw_mangle_output_rule(self):
+        args = {
+            'chain': 'output',
+            'action': 'mark-connection',
+            'new-connection-mark': 'ProtonVPN',
+            'dst-address': '0.0.0.0/0',
+            'connection-mark': 'no-mark'
+        }
+        self.add_fw_mangle_rule(args)
