@@ -6,23 +6,23 @@ class MikroTikSetup:
         self.user = user
         self.pw = pw
 
-    def connect_to_api(self):
+    def connect_api(self):
         connection = ros.RouterOsApiPool(self.host, username=self.user, password=self.pw, plaintext_login=True)
         self.api = connection.get_api()
 
-    def get_protonvpn_cert(self):
+    def fetch_protonvpn_cert(self):
         self.api.get_binary_resource('/').call('tool/fetch',{ 'url': "https://protonvpn.com/download/ProtonVPN_ike_root.der" })
 
-    def set_ipsec_mode_config(self):
+    def add_ipsec_mode_config(self):
         self.api.get_binary_resource('/').call('ip/ipsec/mode-config/add', {'connection-mark': 'ProtonVPN1', 'name': 'ProtonVPN1', 'responder': 'no'})
 
-    def set_ipsec_policy_group(self):
+    def add_ipsec_policy_group(self):
         self.api.get_binary_resource('/').call('ip/ipsec/policy/group/add', {'name': 'ProtonVPN'})
 
-    def set_ipsec_profile(self):
+    def add_ipsec_profile(self):
         self.api.get_binary_resource('/').call('ip/ipsec/profile/add', {'dh-group': 'modp4096,modp2048', 'enc-algorithm': 'aes-256', 'hash-algorithm': 'sha256', 'name': 'ProtonVPN'})
 
-    def set_ipsec_peer(self):
+    def add_ipsec_peer(self):
         args = {
             'address': 'nl-free-04.protonvpn.com',
             'disabled': 'yes',
@@ -44,7 +44,7 @@ class MikroTikSetup:
             'pfs-group': 'modp2048',
             '.id': self.get_ipsec_proposal()
         }
-        self.api.get_binary_resource('/').call('ip/ipsec/peer/set',args)
+        self.api.get_binary_resource('/').call('ip/ipsec/proposal/set',args)
 
     def add_ipsec_identity(self, username, password):
         args = {
@@ -91,3 +91,10 @@ class MikroTikSetup:
             'connection-mark': 'no-mark'
         }
         self.add_fw_mangle_rule(args)
+
+    def set_ipsec_peer_activation(self):
+        args = {
+            'disabled': 'no',
+            '.id': 'ProtonVPN'
+        }
+        self.api.get_binary_resource('/').call('ip/ipsec/peer/set',args)

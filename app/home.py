@@ -2,11 +2,8 @@ import PySimpleGUI as sg
 import routeros_api as ros
 from mikrotik_setup import MikroTikSetup as mtik
 
-def print_users(router_api):
-    return router_api.get_binary_resource('/').call('user/print', {})
+sg.theme('SystemDefaultForReal')
 
-sg.theme('SystemDefaultForReal')   # Add a touch of color
-# All the stuff inside your window.
 layout = [  [sg.Text('Configure ProtonVPN on MikroTik', font='14')],
             [sg.Text('OpenVPN / IKEv2 username: '), sg.InputText()],
             [sg.Text('OpenVPN / IKEv2 password: '), sg.InputText()],
@@ -20,23 +17,22 @@ window = sg.Window('Window Title', layout)
 # Event Loop to process "events" and get the "values" of the inputs
 while True:
     event, values = window.read()
-    if event == sg.WIN_CLOSED or event == 'Cancel': # if user closes window or clicks cancel
+    if event == sg.WIN_CLOSED or event == 'Cancel':
         break
     if event == 'Ok':
-        # connection = ros.RouterOsApiPool(values[2], username=values[3], password=values[4], plaintext_login=True)
-        # api = connection.get_api()
-        # api.get_binary_resource('/').call('tool/fetch',{ 'url': "https://protonvpn.com/download/ProtonVPN_ike_root.der" })
-        #users = api.get_resource('user')
         try:
             setupMikrotik = mtik(values[2], values[3], values[4])
-            setupMikrotik.connect_to_api()
-            #setupMikrotik.get_protonvpn_cert()
-            #setupMikrotik.set_ipsec_mode_config()
-            print(setupMikrotik.get_ipsec_proposal())
-            # users.remove(id="testuser1")
-            # users.add(name='testuser1', password='987654321', group='read')
-            # users_list = print_users(api)
-            print('users_list')
+            setupMikrotik.connect_api()
+            setupMikrotik.fetch_protonvpn_cert()
+            setupMikrotik.add_ipsec_mode_config()
+            setupMikrotik.add_ipsec_policy_group()
+            setupMikrotik.add_ipsec_profile()
+            setupMikrotik.add_ipsec_peer()
+            setupMikrotik.set_ipsec_proposal()
+            setupMikrotik.add_ipsec_identity(values[0], values[1])
+            setupMikrotik.add_ipsec_policy()
+            setupMikrotik.add_fw_mangle_prerouting_rule()
+            setupMikrotik.add_fw_mangle_output_rule()
         except ValueError:
             print("Could not add a user, since it already exists.")
 
