@@ -13,8 +13,16 @@ class MikroTikSetup:
     def fetch_protonvpn_cert(self):
         self.api.get_binary_resource('/').call('tool/fetch',{ 'url': "https://protonvpn.com/download/ProtonVPN_ike_root.der" })
 
+    def create_certificate(self):
+        args = {
+            'name': 'ProtonVPN',
+            'file-name': 'ProtonVPN_ike_root.der',
+            'passphrase': ''
+        }
+        self.api.get_binary_resource('/').call('certificate/import', args)
+
     def add_ipsec_mode_config(self):
-        self.api.get_binary_resource('/').call('ip/ipsec/mode-config/add', {'connection-mark': 'ProtonVPN1', 'name': 'ProtonVPN1', 'responder': 'no'})
+        self.api.get_binary_resource('/').call('ip/ipsec/mode-config/add', {'connection-mark': 'ProtonVPN', 'name': 'ProtonVPN', 'responder': 'no'})
 
     def add_ipsec_policy_group(self):
         self.api.get_binary_resource('/').call('ip/ipsec/policy/group/add', {'name': 'ProtonVPN'})
@@ -25,7 +33,7 @@ class MikroTikSetup:
     def add_ipsec_peer(self):
         args = {
             'address': 'nl-free-04.protonvpn.com',
-            'disabled': 'yes',
+            'disabled': 'no',
             'exchange-mode': 'ike2',
             'name': 'ProtonVPN',
             'profile': 'ProtonVPN',
@@ -67,7 +75,7 @@ class MikroTikSetup:
             'src-address': '0.0.0.0/0',
             'template': 'yes'
         }
-        self.api.get_binary_resource('/').call('ip/ipsec/add',args)
+        self.api.get_binary_resource('/').call('ip/ipsec/policy/add',args)
 
     def add_fw_mangle_rule(self, args):
         self.api.get_binary_resource('/').call('ip/firewall/mangle/add', args)

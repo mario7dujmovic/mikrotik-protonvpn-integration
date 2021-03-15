@@ -24,6 +24,7 @@ while True:
             setupMikrotik = mtik(values[2], values[3], values[4])
             setupMikrotik.connect_api()
             setupMikrotik.fetch_protonvpn_cert()
+            setupMikrotik.create_certificate()
             setupMikrotik.add_ipsec_mode_config()
             setupMikrotik.add_ipsec_policy_group()
             setupMikrotik.add_ipsec_profile()
@@ -34,6 +35,8 @@ while True:
             setupMikrotik.add_fw_mangle_prerouting_rule()
             setupMikrotik.add_fw_mangle_output_rule()
         except ValueError:
-            print("Could not add a user, since it already exists.")
+            print("Things broke somewhere lol")
+            
+        break
 
 window.close()

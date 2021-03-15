@@ -13,3 +13,8 @@ This application enables you to easily implement ProtonVPN on your MikroTik rout
 
 ### running the script 
 `pipenv run python app/home.py`
+
+### worth noting
+- the system clock on your router has to be set up properly. the certificates won't work if your clock is set to 1970
+- the ProtonVPN server is currently hardcoded into the application, but the goal (for the start) is to have a dropdown of free VPN servers. if you'd like to change the server you're connecting to, run the app as you normally would, and then log in into your router and run this command:
+`/ip ipsec peer set address=your-awesome-protonvpn-server.com ProtonVPN`
