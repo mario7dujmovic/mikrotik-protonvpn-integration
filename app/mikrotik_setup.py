@@ -30,9 +30,9 @@ class MikroTikSetup:
     def add_ipsec_profile(self):
         self.api.get_binary_resource('/').call('ip/ipsec/profile/add', {'dh-group': 'modp4096,modp2048', 'enc-algorithm': 'aes-256', 'hash-algorithm': 'sha256', 'name': 'ProtonVPN'})
 
-    def add_ipsec_peer(self):
+    def add_ipsec_peer(self): #TODO: ping server before attempting to do this because ProtonVPN disables servers
         args = {
-            'address': 'nl-free-04.protonvpn.com',
+            'address': 'nl-free-02.protonvpn.com',
             'disabled': 'no',
             'exchange-mode': 'ike2',
             'name': 'ProtonVPN',
